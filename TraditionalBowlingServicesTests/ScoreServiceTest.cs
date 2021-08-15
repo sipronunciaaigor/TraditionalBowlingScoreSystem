@@ -1,7 +1,9 @@
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
+using AutoFixture.Xunit2;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using TraditionalBowlingServices;
 using Xunit;
 
@@ -152,6 +154,40 @@ public class ScoreServiceTest
         for (int i = 0; i < results.Count; i++)
         {
             results[i].Should().Be(0.ToString());
+        }
+    }
+
+    [Theory, AutoData]
+    public void GetScores_ShouldReturnGameOfSpares([Range(1,9)]int firstShot)
+    {
+        // Arrange
+        int secondShot = 10 - firstShot;
+        int totShots = 21;
+        int totFrames = 10;
+        List<int> spareFrame = new(2) { firstShot, secondShot };
+
+        List<int> pinsDowned = new(totShots);
+        for (int i = 0; i < totShots; i++)
+        {
+            pinsDowned.Add(i % 2 == 0 ? firstShot : secondShot);
+        }
+
+        List<List<int>> frames = new(totFrames);
+        for (int i = 0; i < totFrames - 1; i++)
+        {
+            frames.Add(spareFrame);
+        }
+        frames.Add(new(3) { firstShot, secondShot, firstShot });
+
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(totFrames);
+        for (int i = 0; i < results.Count; i++)
+        {
+            results[i].Should().Be(((i + 1) * (firstShot + secondShot + firstShot)).ToString());
         }
     }
 }
