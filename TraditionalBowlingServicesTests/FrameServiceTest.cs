@@ -1,13 +1,22 @@
+using AutoFixture;
+using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using TraditionalBowlingServices;
 using Xunit;
 
 namespace TraditionalBowlingServicesTests;
 
-public class ScoringServiceTest
+public class FrameServiceTest
 {
-    public ScoringServiceTest()
+    private readonly FrameService _frameService;
+
+    public FrameServiceTest()
     {
+        Fixture fixture = new();
+        fixture.Customize(new AutoNSubstituteCustomization());
+        fixture.Freeze<ILogger<FrameService>>();
+        _frameService = fixture.Create<FrameService>();
     }
 
     [Theory]
@@ -29,7 +38,7 @@ public class ScoringServiceTest
         string result = string.Empty; // can use string builder
 
         // Act
-        var frames = ScoringService.Frames.GetFrames(shots.ToList());
+        var frames = _frameService.GetFrames(shots.ToList());
         for (int i = 0; i < frames.Count; i++)
         {
             result = string.Concat(result, "[" + string.Join(',', frames[i]) + "]");
@@ -60,7 +69,7 @@ public class ScoringServiceTest
             }
 
             // Act
-            var frames = ScoringService.Frames.GetFrames(allShots);
+            var frames = _frameService.GetFrames(allShots);
             for (int j = 0; j < frames.Count; j++)
             {
                 result = string.Concat(result, "[" + string.Join(',', frames[j]) + "]");
@@ -80,7 +89,7 @@ public class ScoringServiceTest
         int[] shotArray = new int[1] { shot };
 
         // Act
-        Action getFrames = () => ScoringService.Frames.GetFrames(shotArray.ToList());
+        Action getFrames = () => _frameService.GetFrames(shotArray.ToList());
 
         // Assert
         getFrames.Should().Throw<ArgumentOutOfRangeException>("score").WithMessage($"Score {shot} not valid. Must be between 0 and 10 (Parameter 'score')");
@@ -94,7 +103,7 @@ public class ScoringServiceTest
         // Arrange
 
         // Act
-        Action getFrames = () => ScoringService.Frames.GetFrames(shots.ToList());
+        Action getFrames = () => _frameService.GetFrames(shots.ToList());
 
         // Assert
         getFrames.Should().Throw<ArgumentOutOfRangeException>("sum").WithMessage($"Frame 1 not valid. Must be between 0 and 10 (Parameter 'sum')");
@@ -113,7 +122,7 @@ public class ScoringServiceTest
             allShots.Add(10);
         }
         // Act
-        Action getFrames = () => ScoringService.Frames.GetFrames(allShots.ToList());
+        Action getFrames = () => _frameService.GetFrames(allShots.ToList());
 
         // Assert
         getFrames.Should().Throw<ArgumentOutOfRangeException>("lastShots").WithMessage($"Last frame not valid. Cannot contain more than 3 shots. It contains {lastFrameShots} (Parameter 'lastShots')");
@@ -134,7 +143,7 @@ public class ScoringServiceTest
         allShots.Add(lastTwoShotsValue);
 
         // Act
-        Action getFrames = () => ScoringService.Frames.GetFrames(allShots.ToList());
+        Action getFrames = () => _frameService.GetFrames(allShots.ToList());
 
         // Assert
         getFrames.Should().Throw<ArgumentOutOfRangeException>("sum").WithMessage("Invalid shots in the last frame. (Parameter 'sum')");
@@ -157,7 +166,7 @@ public class ScoringServiceTest
         allShots.Add(lastShotsValue);
 
         // Act
-        Action getFrames = () => ScoringService.Frames.GetFrames(allShots.ToList());
+        Action getFrames = () => _frameService.GetFrames(allShots.ToList());
 
         // Assert
         getFrames.Should().Throw<ArgumentOutOfRangeException>("lastShots").WithMessage($"Last frame not valid. Not allowed to throw the last ball (Parameter 'lastShots')");

@@ -7,10 +7,12 @@ namespace TraditionalBowlingScoreSystem.Controllers;
 //[Route("[controller]")]
 public class BowlingController : ControllerBase
 {
+    private readonly IGameService _gameService;
     private readonly ILogger<BowlingController> _logger;
 
-    public BowlingController(ILogger<BowlingController> logger)
+    public BowlingController(IGameService gameService, ILogger<BowlingController> logger)
     {
+        _gameService = gameService;
         _logger = logger;
     }
 
@@ -19,9 +21,7 @@ public class BowlingController : ControllerBase
     {
         try
         {
-            var frames = ScoringService.Frames.GetFrames(requestDto.PinsDowned);
-            var scores = ScoringService.Scores.GetScores(requestDto.PinsDowned, frames);
-            return Ok(scores);
+            return Ok(_gameService.GetScores(requestDto.PinsDowned));
         }
         catch (ArgumentOutOfRangeException ex)
         {

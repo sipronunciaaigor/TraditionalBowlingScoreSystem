@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using TraditionalBowlingServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "TraditionalBowlingScoreSystem", Version = "v1" });
 });
+builder.Services.RegisterGameServices();
 
 var app = builder.Build();
 
