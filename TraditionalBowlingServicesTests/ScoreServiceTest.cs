@@ -123,4 +123,35 @@ public class ScoreServiceTest
             results[i].Should().Be(((i + 1) * 30).ToString());
         }
     }
+
+    [Fact]
+    public void GetScores_ShouldDetermineGutterBallGame()
+    {
+        // Arrange
+        int totShots = 20;
+        int totFrames = 10;
+        List<int> gutterFrame = new(2) { 0, 0 };
+
+        List<int> pinsDowned = new(totShots);
+        for (int i = 0; i < totShots; i++)
+        {
+            pinsDowned.Add(0);
+        }
+
+        List<List<int>> frames = new(totFrames);
+        for (int i = 0; i < totFrames; i++)
+        {
+            frames.Add(gutterFrame);
+        }
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(totFrames);
+        for (int i = 0; i < results.Count; i++)
+        {
+            results[i].Should().Be(0.ToString());
+        }
+    }
 }
