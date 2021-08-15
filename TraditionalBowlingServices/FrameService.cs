@@ -15,6 +15,47 @@ public class FrameService : IFrameService
     {
         _logger = logger;
     }
+    //
+    // public List<Frame> GetFrames(List<int> pinsDowned)
+    // {
+    //     List<Frame> frames = new();
+    //     List<int> shots = new();
+    //
+    //     for (int i = 0; i < pinsDowned.Count && frames.Count < 10; i++)
+    //     {
+    //         Frame frame = new(i);
+    //         frame.AddShot(pinsDowned[i]);
+    //
+    //         // add frame when 2 shots, spare or strike
+    //         if (frame.Sum == 10 || frame.Count == 2)
+    //         {
+    //             frames.Add(shots.ToList());
+    //             shots.Clear();
+    //         }
+    //
+    //         if (frames.Count == 9)
+    //         {
+    //             var lastShots = pinsDowned.Skip(i + 1).ToList();
+    //             var lastShotsCount = lastShots.Count;
+    //
+    //             if (frame.IlastShotsCount > 0)
+    //             {
+    //                 ValidateLastFrame(lastShots, lastShotsCount);
+    //                 frames.Add(lastShots);
+    //             }
+    //
+    //             shots.Clear();
+    //         }
+    //     }
+    //
+    //     // take shots when game not ended
+    //     if (shots.Count > 0)
+    //     {
+    //         frames.Add(shots);
+    //     }
+    //
+    //     return frames;
+    // }
 
     public List<List<int>> GetFrames(List<int> pinsDowned)
     {
