@@ -1,6 +1,8 @@
 using TraditionalBowlingServices;
 using Xunit;
 using FluentAssertions;
+using AutoFixture.Xunit2;
+using System.ComponentModel.DataAnnotations;
 
 namespace TraditionalBowlingServicesTests;
 
@@ -30,14 +32,45 @@ public class ScoringServiceTest
 
         // Act
         var frames = ScoringService.Frames.GetFrames(shots.ToList());
-
-        // Assert
         for (int i = 0; i < frames.Count; i++)
         {
             result = string.Concat(result, "[" + string.Join(',', frames[i]) + "]");
         }
 
+        // Assert
         result.Should().Be(expectedFrames);
+    }
+
+    /// <summary>
+    /// Covers the following shape: { 10, 10, 10 }, "[10][10][10]")]
+    /// </summary>
+    [Fact]
+    public void GetFrames_ShouldReturnProperFramesSeriesOf10s_ExcludesLastFrame()
+    {
+        // Arrange
+        int shots = 9;
+        for (int i = 0; i < shots; i++)
+        {
+            const int pinDowns = 10;
+            string expectedFrames = string.Empty; // can use string builder
+            string result = string.Empty; // can use string builder
+            List<int> allShots = new(shots);
+            for (int j = 0; j < shots; j++)
+            {
+                allShots.Add(pinDowns);
+                expectedFrames = string.Concat(expectedFrames, "[" + pinDowns + "]");
+            }
+
+            // Act
+            var frames = ScoringService.Frames.GetFrames(allShots);
+            for (int j = 0; j < frames.Count; j++)
+            {
+                result = string.Concat(result, "[" + string.Join(',', frames[j]) + "]");
+            }
+
+            // Assert
+            result.Should().Be(expectedFrames);
+        }
     }
 
     [Theory]

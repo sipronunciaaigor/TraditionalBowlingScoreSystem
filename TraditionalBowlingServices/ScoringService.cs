@@ -38,23 +38,26 @@ public class ScoringService
                 if (frames.Count == 9)
                 {
                     var lastShots = pinsDowned.Skip(i + 1).ToList();
-                    var lastShotsCount = lastShots.Count;
-                    if (lastShotsCount > 3)
+                    if (lastShots.Count > 0)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
-                    }
+                        var lastShotsCount = lastShots.Count;
+                        if (lastShotsCount > 3)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
+                        }
 
-                    var firstTwoLastShotsSum = lastShots.Take(2).Sum();
-                    if (firstTwoLastShotsSum > 10 && lastShots[0] < 10 && firstTwoLastShotsSum != 20)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
-                    }
-                    else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
-                    }
+                        var firstTwoLastShotsSum = lastShots.Take(2).Sum();
+                        if (firstTwoLastShotsSum > 10 && lastShots[0] < 10 && firstTwoLastShotsSum != 20)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
+                        }
+                        else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
+                        }
 
-                    frames.Add(lastShots);
+                        frames.Add(lastShots);
+                    }
                     shots.Clear();
                 }
             }
