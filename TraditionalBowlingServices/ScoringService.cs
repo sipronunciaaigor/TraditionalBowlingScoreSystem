@@ -43,7 +43,7 @@ public class ScoringService
                     }
 
                     var firstTwoLastShotsSum = lastShots.Take(2).Sum();
-                    if (firstTwoLastShotsSum > 10)
+                    if (firstTwoLastShotsSum > 10 && firstTwoLastShotsSum != 20)
                     {
                         throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
                     }

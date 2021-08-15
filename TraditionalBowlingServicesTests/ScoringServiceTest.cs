@@ -11,12 +11,15 @@ public class ScoringServiceTest
 
     [Theory]
     [InlineData(new int[] { }, "")]
+    [InlineData(new int[] { 0 }, "[0]")]
+    [InlineData(new int[] { 1, 1 }, "[1,1]")]
     [InlineData(new int[] { 1, 1, 1 }, "[1,1][1]")]
     [InlineData(new int[] { 10, 1, 1 }, "[10][1,1]")]
-    [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }, "[10][10][10][10][10][10][10][10][10][10]")]
     [InlineData(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "[0,0][0,0][0,0][0,0][0,0][0,0][0,0][0,0][0,0][0]")]
-    [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 1, 10 }, "[10][10][10][10][10][10][10][10][10][9,1,10]")]
     [InlineData(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "[0,0][0,0][0,0][0,0][0,0][0,0][0,0][0,0][0,0][0,0]")] // gutter-ball
+    [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 1, 10 }, "[10][10][10][10][10][10][10][10][10][9,1,10]")]
+    [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }, "[10][10][10][10][10][10][10][10][10][10]")] // start of last frame
+    [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }, "[10][10][10][10][10][10][10][10][10][10,10]")] // second shot of last frame
     [InlineData(new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }, "[10][10][10][10][10][10][10][10][10][10,10,10]")] // perfect match
     public void GetFrames_ShouldReturnProperFrames(int[] shots, string expectedFrames)
     {
