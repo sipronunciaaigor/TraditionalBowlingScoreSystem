@@ -29,16 +29,33 @@ public class ScoreService : IScoreService
             int frameLen = frames[i].Count;
             index += frameLen;
 
-            score = ExecuteStrategy(
-                (frameLen == 1 && frameSum == 10, () => StrikeStrategy(pinsDowned, index, score, labels)),
-                (frameLen == 1 && frameSum < 10, () => OpenStrategy(score, frameSum, labels)),
-                (frameLen == 2 && frameSum >= 10, () => SpareStrategy(pinsDowned, index, score, labels)),
-                (frameLen == 2 && frameSum < 10, () => ClosedStrategy(score, frameSum, labels)),
-                (i == frames.Count - 1 && frameLen < 4 && frameSum <= 30, () => LastStrategy(score, frameSum, labels))
-            );
+            score = StrategyVisitor(score, labels,
+                (frameLen == 1 && frameSum == 10, new StrikeFrameScoreStrategy(pinsDowned, index)),
+                (frameLen == 1 && frameSum < 10, new OpenFrameScoreStrategy(frameSum)),
+                (frameLen == 2 && frameSum >= 10, new SpareFrameScoreStrategy(pinsDowned, index)),
+                (frameLen == 2 && frameSum < 10, new ClosedFrameScoreStrategy(frameSum)),
+                (i == frames.Count - 1 && frameLen < 4 && frameSum <= 30, new LastFrameScoreStrategy(frameSum)));
+            // score = ExecuteStrategy(
+            //     (frameLen == 1 && frameSum == 10, () => StrikeStrategy(pinsDowned, index, score, labels)),
+            //     (frameLen == 1 && frameSum < 10, () => OpenStrategy(score, frameSum, labels)),
+            //     (frameLen == 2 && frameSum >= 10, () => SpareStrategy(pinsDowned, index, score, labels)),
+            //     (frameLen == 2 && frameSum < 10, () => ClosedStrategy(score, frameSum, labels)),
+            //     (i == frames.Count - 1 && frameLen < 4 && frameSum <= 30, () => LastStrategy(score, frameSum, labels))
+            // );
         }
 
         return labels;
+    }
+
+    public static int StrategyVisitor(int score, List<string> labels,
+        params (bool condition, IFrameScoreStrategy strategy)[] strategies)
+    {
+        var tuple = strategies.First(tuple => tuple.condition);
+        IFrameScoreStrategy strategy = tuple.strategy;
+        ScoreLabelDto scoreLabel = strategy.GetScoreLabel();
+        score += scoreLabel.Score;
+        labels.Add(scoreLabel.UnknownLabel ? "*" : score.ToString());
+        return score;
     }
 
     public static int ExecuteStrategy(params (bool condition, Func<int> strategy)[] strategies)
