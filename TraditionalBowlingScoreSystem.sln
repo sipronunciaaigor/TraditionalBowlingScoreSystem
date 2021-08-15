@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingScoreSystem", "TraditionalBowlingAPI\TraditionalBowlingAPI.csproj", "{BC6BC766-91D1-4748-B392-6082305BDF9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingAPI", "TraditionalBowlingAPI\TraditionalBowlingAPI.csproj", "{BC6BC766-91D1-4748-B392-6082305BDF9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingServices", "TraditionalBowlingServices\TraditionalBowlingServices.csproj", "{AE16E439-3750-4159-B282-3D1DCCE9A5EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingServices", "TraditionalBowlingServices\TraditionalBowlingServices.csproj", "{AE16E439-3750-4159-B282-3D1DCCE9A5EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingServicesTests", "TraditionalBowlingServicesTests\TraditionalBowlingServicesTests.csproj", "{867F325A-A48D-49E7-8EF5-77AD12898FF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AE16E439-3750-4159-B282-3D1DCCE9A5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE16E439-3750-4159-B282-3D1DCCE9A5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE16E439-3750-4159-B282-3D1DCCE9A5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867F325A-A48D-49E7-8EF5-77AD12898FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{867F325A-A48D-49E7-8EF5-77AD12898FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{867F325A-A48D-49E7-8EF5-77AD12898FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{867F325A-A48D-49E7-8EF5-77AD12898FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

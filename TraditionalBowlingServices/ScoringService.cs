@@ -10,7 +10,7 @@ public class ScoringService
             List<List<int>> frames = new();
             List<int> shots = new();
 
-            for (int i = 0; i < input.Count; i++)
+            for (int i = 0; i < input.Count && frames.Count <= 9; i++)
             {
                 var score = input[i];
                 if (score < 0 || score > 10)
@@ -33,18 +33,27 @@ public class ScoringService
                     shots.Clear();
                 }
 
-                // take everything else
                 if (frames.Count == 9)
                 {
-                    var leftovers = input.Skip(i + 1).ToList();
-                    if (leftovers.Count > 3)
+                    var lastShots = input.Skip(i + 1).ToList();
+                    var lastShotsCount = lastShots.Count;
+                    if (lastShotsCount > 3)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(leftovers), $"Last frame not valid. Cannot contain more than 3 shots. It contains {leftovers.Count}");
+                        throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
                     }
 
-                    frames.Add(leftovers);
+                    var firstTwoLastShotsSum = lastShots.Take(2).Sum();
+                    if (firstTwoLastShotsSum > 10)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
+                    }
+                    else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
+                    }
+
+                    frames.Add(lastShots);
                     shots.Clear();
-                    break;
                 }
             }
 
