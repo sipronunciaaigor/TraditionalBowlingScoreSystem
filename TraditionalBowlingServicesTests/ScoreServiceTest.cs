@@ -11,6 +11,7 @@ public class ScoreServiceTest
 {
     private readonly ScoreService _scoreService;
     private readonly Fixture _fixture;
+    private readonly List<int> _strike = new() { 10 };
 
     public ScoreServiceTest()
     {
@@ -34,24 +35,92 @@ public class ScoreServiceTest
         result.Should().BeEmpty();
     }
 
-    // [Theory]
-    // [InlineData(1)]
-    // [InlineData(2)]
-    // public void GetScores_ShouldUseStrikeFrameScoreStrategy(int totFrames)
-    // {
-    //     // Arrange
-    //     List<int> strike = _fixture.Build<int>().With(x => x, 10).CreateMany(1).ToList();
-    //     List<int> pinsDowned = _fixture.Build<int>().With(x => x, 10).CreateMany(totFrames).ToList();
-    //     List<List<int>> frames = _fixture.Build<List<int>>().With(x => x, strike).CreateMany(totFrames).ToList();
-    //
-    //     // Act
-    //     var results = _scoreService.GetScores(pinsDowned, frames);
-    //
-    //     //Assert
-    //     results.Count.Should().Be(totFrames);
-    //     foreach (var result in results)
-    //     {
-    //         result.Should().Be("*");
-    //     }
-    // }
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void GetScores_ShouldUseStrikeFrameScoreStrategy_OnlyUnknownResults(int totFrames)
+    {
+        // Arrange
+        List<int> pinsDowned = new() { 10 };
+        List<List<int>> frames = new(totFrames);
+        for (int i = 0; i < totFrames; i++)
+        {
+            frames.Add(_strike);
+        }
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(totFrames);
+        foreach (var result in results)
+        {
+            result.Should().Be("*");
+        }
+    }
+
+    [Fact]
+    public void GetScores_ShouldUseStrikeFrameScoreStrategy_UnknownResults()
+    {
+        // Arrange
+        int totStrikes = 9;
+        List<int> pinsDowned = new(totStrikes);
+        for (int i = 0; i < totStrikes; i++)
+        {
+            pinsDowned.Add(10);
+        }
+
+        List<List<int>> frames = new(totStrikes);
+        for (int i = 0; i < totStrikes; i++)
+        {
+            frames.Add(_strike);
+        }
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(totStrikes);
+        for (int i = 1; i <= results.Count; i++)
+        {
+            if (i < totStrikes - 1)
+            {
+                results[i - 1].Should().Be((i * 30).ToString());
+            }
+            else
+            {
+                results[i - 1].Should().Be("*");
+            }
+        }
+    }
+
+    [Fact]
+    public void GetScores_ShouldDeterminePerfectGame()
+    {
+        // Arrange
+        int totStrikes = 12;
+        int totFrames = 10;
+
+        List<int> pinsDowned = new(totStrikes);
+        for (int i = 0; i < totStrikes; i++)
+        {
+            pinsDowned.Add(10);
+        }
+
+        List<List<int>> frames = new(totFrames);
+        for (int i = 0; i < totFrames; i++)
+        {
+            frames.Add(_strike);
+        }
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(totFrames);
+        for (int i = 0; i < results.Count; i++)
+        {
+            results[i].Should().Be(((i + 1) * 30).ToString());
+        }
+    }
 }
