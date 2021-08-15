@@ -1,9 +1,6 @@
 ﻿
 namespace TraditionalBowlingServices;
 
-
-// 1. find frames
-// 2. analyse each frame
 public class ScoringService
 {
     public class Frames
@@ -33,7 +30,7 @@ public class ScoringService
 
                 if (frames.Count == 9)
                 {
-                    frames.Add(input.Skip(i).ToList());
+                    frames.Add(input.Skip(i + 1).ToList());
                     shots.Clear();
                     break;
                 }
