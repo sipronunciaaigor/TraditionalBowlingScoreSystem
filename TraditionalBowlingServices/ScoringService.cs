@@ -12,25 +12,37 @@ public class ScoringService
 
             for (int i = 0; i < input.Count; i++)
             {
-                shots.Add(input[i]);
-                int sum = shots.Sum();
+                var score = input[i];
+                if (score < 0 || score > 10)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(score), $"Score {score} not valid. Must be between 0 and 10");
+                }
 
-                // take 2 shots
+                shots.Add(score);
+
+                int sum = shots.Sum();
+                if (sum > 10)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(sum), $"Frame {i} not valid. Must be between 0 and 10");
+                }
+
+                // add frame when 2 shots, spare or strike
                 if (sum == 10 || shots.Count == 2)
                 {
                     frames.Add(shots.ToList());
                     shots.Clear();
                 }
-                // take 1 shot
-                else if (sum > 10)
-                {
-                    frames.Add(shots.Take(shots.Count - 1).ToList());
-                    shots = new(input[i]);
-                }
 
+                // take everything else
                 if (frames.Count == 9)
                 {
-                    frames.Add(input.Skip(i + 1).ToList());
+                    var leftovers = input.Skip(i + 1).ToList();
+                    if (leftovers.Count > 3)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(leftovers), $"Last frame not valid. Cannot contain more than 3 shots. It contains {leftovers.Count}");
+                    }
+
+                    frames.Add(leftovers);
                     shots.Clear();
                     break;
                 }
