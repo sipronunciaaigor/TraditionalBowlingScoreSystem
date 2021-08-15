@@ -4,7 +4,6 @@ using TraditionalBowlingServices;
 
 namespace TraditionalBowlingScoreSystem.Controllers;
 [ApiController]
-//[Route("[controller]")]
 public class BowlingController : ControllerBase
 {
     private readonly IGameService _gameService;
@@ -17,7 +16,7 @@ public class BowlingController : ControllerBase
     }
 
     [HttpPost("scores")]
-    public IActionResult ComputeProgress(ScoreProgressRequestDto requestDto)
+    public IActionResult Scores(ScoreProgressRequestDto requestDto)
     {
         try
         {

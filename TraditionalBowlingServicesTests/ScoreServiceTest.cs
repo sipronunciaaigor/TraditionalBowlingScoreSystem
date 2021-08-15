@@ -158,7 +158,7 @@ public class ScoreServiceTest
     }
 
     [Theory, AutoData]
-    public void GetScores_ShouldReturnGameOfSpares([Range(1,9)]int firstShot)
+    public void GetScores_ShouldReturnGameOfSpares([Range(1, 9)] int firstShot)
     {
         // Arrange
         int secondShot = 10 - firstShot;
@@ -189,5 +189,55 @@ public class ScoreServiceTest
         {
             results[i].Should().Be(((i + 1) * (firstShot + secondShot + firstShot)).ToString());
         }
+    }
+
+    [Fact]
+    public void GetScores_ShouldReturnComplexResult_Example2()
+    {
+        // Arrange
+        List<int> pinsDowned = new(12);
+        List<List<int>> frames = new(6);
+        for (int i = 0; i < 12; i++)
+        {
+            pinsDowned.Add(1);
+            if (i % 2 == 0)
+            {
+                frames.Add(new() { 1, 1 });
+            }
+        }
+
+        List<string> expectedResult = new() { "2", "4", "6", "8", "10", "12" };
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(frames.Count);
+        results.Should().BeEquivalentTo(expectedResult);
+    }
+
+    [Fact]
+    public void GetScores_ShouldReturnComplexResult_Example3()
+    {
+        // Arrange
+        List<int> pinsDowned = new() { 1, 1, 1, 1, 9, 1, 2, 8, 9, 1, 10, 10 };
+
+        List<List<int>> frames = new(7);
+        frames.Add(new() { 1, 1 });
+        frames.Add(new() { 1, 1 });
+        frames.Add(new() { 9, 1 });
+        frames.Add(new() { 2, 8 });
+        frames.Add(new() { 9, 1 });
+        frames.Add(new() { 10 });
+        frames.Add(new() { 10 });
+
+        List<string> expectedResult = new() { "2", "4", "16", "35", "55", "*", "*" };
+
+        // Act
+        var results = _scoreService.GetScores(pinsDowned, frames);
+
+        //Assert
+        results.Should().HaveCount(frames.Count);
+        results.Should().BeEquivalentTo(expectedResult);
     }
 }
