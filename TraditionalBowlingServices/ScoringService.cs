@@ -31,13 +31,18 @@ public class ScoringService
                     shots = new(input[i]);
                 }
 
-                // on 9th take all that's left
                 if (frames.Count == 9)
                 {
                     frames.Add(input.Skip(i).ToList());
                     shots.Clear();
                     break;
                 }
+            }
+
+            // take shots when game not ended
+            if (shots.Count > 0)
+            {
+                frames.Add(shots);
             }
             return frames;
         }
