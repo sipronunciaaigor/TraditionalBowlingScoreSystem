@@ -17,8 +17,20 @@ public class BowlingController : ControllerBase
     [HttpPost("scores")]
     public IActionResult ComputeProgress(ScoreProgressRequestDto requestDto)
     {
-        var frames = ScoringService.Frames.GetFrames(requestDto.PinsDowned);
-        var scores = ScoringService.Scores.GetScores(requestDto.PinsDowned, frames);
-        return Ok(scores);
+        try
+        {
+            var frames = ScoringService.Frames.GetFrames(requestDto.PinsDowned);
+            var scores = ScoringService.Scores.GetScores(requestDto.PinsDowned, frames);
+            return Ok(scores);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }
