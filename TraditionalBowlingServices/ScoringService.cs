@@ -1,18 +1,20 @@
 ﻿
+using TraditionalBowlingDomain;
+
 namespace TraditionalBowlingServices;
 
 public class ScoringService
 {
     public class Frames
     {
-        public static List<List<int>> GetFrames(List<int> input)
+        public static List<List<int>> GetFrames(List<int> pinsDowned)
         {
             List<List<int>> frames = new();
             List<int> shots = new();
 
-            for (int i = 0; i < input.Count && frames.Count <= 9; i++)
+            for (int i = 0; i < pinsDowned.Count && frames.Count <= 9; i++)
             {
-                var score = input[i];
+                var score = pinsDowned[i];
                 if (score < 0 || score > 10)
                 {
                     throw new ArgumentOutOfRangeException(nameof(score), $"Score {score} not valid. Must be between 0 and 10");
@@ -35,7 +37,7 @@ public class ScoringService
 
                 if (frames.Count == 9)
                 {
-                    var lastShots = input.Skip(i + 1).ToList();
+                    var lastShots = pinsDowned.Skip(i + 1).ToList();
                     var lastShotsCount = lastShots.Count;
                     if (lastShotsCount > 3)
                     {
@@ -68,7 +70,7 @@ public class ScoringService
 
     public class Scores
     {
-        public static List<string> GetScores(List<int> input, List<List<int>> frames)
+        public static GameProgressResponseDto GetScores(List<int> pinsDowned, List<List<int>> frames)
         {
             List<string> labels = new();
             var score = 0;
@@ -82,7 +84,7 @@ public class ScoringService
 
                 if (frameLen == 1 && frameSum == 10)
                 {
-                    var nextTwo = input.Skip(index).Take(index + 2).ToList();
+                    var nextTwo = pinsDowned.Skip(index).Take(index + 2).ToList();
                     score += 10 + nextTwo.Sum();
                     labels.Add(nextTwo.Count < 2 ? "*" : score.ToString());
                     continue;
@@ -95,7 +97,7 @@ public class ScoringService
                 }
                 if (frameLen == 2 && frameSum == 10)
                 {
-                    var nextOne = input.Skip(index).Take(index + 1).ToList();
+                    var nextOne = pinsDowned.Skip(index).Take(index + 1).ToList();
                     score += 10 + nextOne.Sum();
                     labels.Add(nextOne.Count < 1 ? "*" : score.ToString());
                     continue;
@@ -113,7 +115,7 @@ public class ScoringService
                     continue;
                 }
             }
-            return labels;
+            return new GameProgressResponseDto() { FrameProgressScores = labels };
         }
     }
 }

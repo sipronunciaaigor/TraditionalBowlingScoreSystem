@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TraditionalBowlingDomain\TraditionalBowlingDomain.csproj" />
     <ProjectReference Include="..\TraditionalBowlingServices\TraditionalBowlingServices.csproj" />
   </ItemGroup>
 
