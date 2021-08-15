@@ -137,7 +137,7 @@ public class ScoringServiceTest
         Action getFrames = () => ScoringService.Frames.GetFrames(allShots.ToList());
 
         // Assert
-        getFrames.Should().Throw<ArgumentOutOfRangeException>("firstTwoLastShotsSum").WithMessage($"First two shots of last frame not valid. Their sum is {lastTwoShotsValue * 2} and exceeds 10 (Parameter 'firstTwoLastShotsSum')");
+        getFrames.Should().Throw<ArgumentOutOfRangeException>("sum").WithMessage("Invalid shots in the last frame. (Parameter 'sum')");
     }
 
     [Fact]

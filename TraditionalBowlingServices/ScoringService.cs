@@ -64,22 +64,26 @@ public class ScoringService
                 throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
             }
 
-            for (int i = 0; i < lastShots.Count - 1; i++)
-            {
-                if (lastShots[i] != 10 && lastShots[i] + lastShots[i + 1] > 10)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid on its shots {i + 1} and {i + 2}. Their sum is {lastShots[i] + lastShots[i + 1]}.");
-                }
-            }
-
             var firstTwoLastShotsSum = lastShots.Take(2).Sum();
-            if (firstTwoLastShotsSum > 10 && lastShots[0] < 10 && firstTwoLastShotsSum != 20)
-            {
-                throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
-            }
-            else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
+            if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
             {
                 throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
+            }
+            
+            List<int> shots = new (3);
+            for (int i = 0; i < lastShots.Count; i++)
+            {
+                var score = lastShots[i];
+                shots.Add(score);
+                var sum = shots.Sum();
+                if (sum > 10)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(sum), $"Invalid shots in the last frame.");
+                }
+                else if (sum == 10)
+                {
+                    shots.Clear();
+                }
             }
         }
     }
