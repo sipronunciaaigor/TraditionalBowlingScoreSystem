@@ -82,38 +82,45 @@ public class ScoringService
                 var frameLen = frames[i].Count;
                 index += frameLen;
 
+                // strike frame strategy
                 if (frameLen == 1 && frameSum == 10)
                 {
-                    var nextTwo = pinsDowned.Skip(index).Take(index + 2).ToList();
+                    var nextTwo = pinsDowned.Skip(index).Take(2).ToList();
                     score += 10 + nextTwo.Sum();
                     labels.Add(nextTwo.Count < 2 ? "*" : score.ToString());
                     continue;
                 }
+                // open frame strategy
                 if (frameLen == 1 && frameSum < 10)
                 {
                     score += frameSum;
                     labels.Add("*");
                     continue;
                 }
+                // spare frame strategy
                 if (frameLen == 2 && frameSum == 10)
                 {
-                    var nextOne = pinsDowned.Skip(index).Take(index + 1).ToList();
+                    var nextOne = pinsDowned.Skip(index).Take(1).ToList();
                     score += 10 + nextOne.Sum();
                     labels.Add(nextOne.Count < 1 ? "*" : score.ToString());
                     continue;
                 }
+                // closed frame strategy
                 if (frameLen == 2 && frameSum < 10)
                 {
-                    score += frames[i].Sum();
+                    score += frameSum;
                     labels.Add(score.ToString());
                     continue;
                 }
+                // last frame strategy
                 if (i == frames.Count - 1 && frameLen < 4 && frameSum <= 30)
                 {
-                    score += frames[i].Sum();
+                    score += frameSum;
                     labels.Add(score.ToString());
                     continue;
                 }
+                // error strategy
+                labels.Add("err");
             }
             return new GameProgressResponseDto() { FrameProgressScores = labels };
         }
