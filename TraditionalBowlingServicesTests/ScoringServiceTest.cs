@@ -1,8 +1,6 @@
+using FluentAssertions;
 using TraditionalBowlingServices;
 using Xunit;
-using FluentAssertions;
-using AutoFixture.Xunit2;
-using System.ComponentModel.DataAnnotations;
 
 namespace TraditionalBowlingServicesTests;
 
@@ -42,7 +40,7 @@ public class ScoringServiceTest
     }
 
     /// <summary>
-    /// Covers the following shape: { 10, 10, 10 }, "[10][10][10]")]
+    /// Covers the following shape: { 10, 10, 10 }, "[10][10][10]")] from 0 to 9 shots
     /// </summary>
     [Fact]
     public void GetFrames_ShouldReturnProperFramesSeriesOf10s_ExcludesLastFrame()

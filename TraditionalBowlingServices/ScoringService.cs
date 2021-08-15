@@ -12,7 +12,7 @@ public class ScoringService
             List<List<int>> frames = new();
             List<int> shots = new();
 
-            for (int i = 0; i < pinsDowned.Count && frames.Count <= 9; i++)
+            for (int i = 0; i < pinsDowned.Count && frames.Count < 10; i++)
             {
                 var score = pinsDowned[i];
                 if (score < 0 || score > 10)
@@ -38,24 +38,11 @@ public class ScoringService
                 if (frames.Count == 9)
                 {
                     var lastShots = pinsDowned.Skip(i + 1).ToList();
-                    if (lastShots.Count > 0)
+                    var lastShotsCount = lastShots.Count;
+
+                    if (lastShotsCount > 0)
                     {
-                        var lastShotsCount = lastShots.Count;
-                        if (lastShotsCount > 3)
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
-                        }
-
-                        var firstTwoLastShotsSum = lastShots.Take(2).Sum();
-                        if (firstTwoLastShotsSum > 10 && lastShots[0] < 10 && firstTwoLastShotsSum != 20)
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
-                        }
-                        else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
-                        }
-
+                        ValidateLastFrame(lastShots, lastShotsCount);
                         frames.Add(lastShots);
                     }
                     shots.Clear();
@@ -68,6 +55,32 @@ public class ScoringService
                 frames.Add(shots);
             }
             return frames;
+        }
+
+        private static void ValidateLastFrame(List<int> lastShots, int lastShotsCount)
+        {
+            if (lastShotsCount > 3)
+            {
+                throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Cannot contain more than 3 shots. It contains {lastShotsCount}");
+            }
+
+            for (int i = 0; i < lastShots.Count - 1; i++)
+            {
+                if (lastShots[i] != 10 && lastShots[i] + lastShots[i + 1] > 10)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid on its shots {i + 1} and {i + 2}. Their sum is {lastShots[i] + lastShots[i + 1]}.");
+                }
+            }
+
+            var firstTwoLastShotsSum = lastShots.Take(2).Sum();
+            if (firstTwoLastShotsSum > 10 && lastShots[0] < 10 && firstTwoLastShotsSum != 20)
+            {
+                throw new ArgumentOutOfRangeException(nameof(firstTwoLastShotsSum), $"First two shots of last frame not valid. Their sum is {firstTwoLastShotsSum} and exceeds 10");
+            }
+            else if (firstTwoLastShotsSum < 10 && lastShotsCount == 3)
+            {
+                throw new ArgumentOutOfRangeException(nameof(lastShots), $"Last frame not valid. Not allowed to throw the last ball");
+            }
         }
     }
 
@@ -101,7 +114,7 @@ public class ScoringService
                     continue;
                 }
                 // spare frame strategy
-                if (frameLen == 2 && frameSum == 10)
+                if (frameLen == 2 && frameSum >= 10)
                 {
                     var nextOne = pinsDowned.Skip(index).Take(1).ToList();
                     score += 10 + nextOne.Sum();
@@ -122,6 +135,8 @@ public class ScoringService
                     labels.Add(score.ToString());
                     continue;
                 }
+
+
                 // error strategy
                 labels.Add("err");
             }
