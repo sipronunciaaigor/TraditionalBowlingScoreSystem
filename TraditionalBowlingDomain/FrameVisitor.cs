@@ -1,6 +1,11 @@
 namespace TraditionalBowlingDomain;
 
-public class FrameVisitor
+public interface IFrameVisitor
+{
+    void Visit(Frame frame);
+}
+
+public class FrameVisitor : IFrameVisitor
 {
     private List<Frame> _frames = new();
 
@@ -13,7 +18,7 @@ public class FrameVisitor
 
         for (var i = 0; i < frames.Count; i++)
         {
-            frames[i].TopIndexInShotSequence += frames[i].Count;
+            frames[i].AbsoluteLastIndex += frames[i].Count;
 
             foreach (var strategy in strategies)
             {
@@ -36,7 +41,7 @@ public class FrameVisitor
 
         for (var i = 0; i < frames.Count; i++)
         {
-            frames[i].TopIndexInShotSequence += frames[i].Count;
+            frames[i].AbsoluteLastIndex += frames[i].Count;
 
             foreach (var strategy in strategies)
             {
@@ -48,5 +53,11 @@ public class FrameVisitor
                 }
             }
         }
+    }
+
+    public void Visit(Frame frame)
+    {
+        ScoreLabelDto sl = new();
+        frame.SetScoreLabel(sl);
     }
 }

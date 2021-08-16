@@ -6,7 +6,7 @@ public class SpareFrameScoreStrategy : IFrameScoreStrategy
 
     public SpareFrameScoreStrategy(Frame frame, List<int> pinsDowned)
     {
-        List<int> nextOne = pinsDowned.Skip(frame.TopIndexInShotSequence).Take(1).ToList();
+        List<int> nextOne = pinsDowned.Skip(frame.AbsoluteLastIndex).Take(1).ToList();
         int totScore = 10 + nextOne.Sum();
         ScoreLabel = new()
         {

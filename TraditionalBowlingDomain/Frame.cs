@@ -13,7 +13,8 @@ public class Frame
     public bool IsClosed() => Type == FrameType.Closed;
     public bool IsLatetst() => Type == FrameType.Latest;
 
-    public int TopIndexInShotSequence { get; set; }
+    public int AbsoluteLastIndex { get; set; }
+    public ScoreLabelDto ScoreLabel { get; private set; }
     public Frame(int index)
     {
         Index = index;
@@ -36,7 +37,12 @@ public class Frame
         Type = GetFrameType();
     }
 
-    
+    public void SetScoreLabel(ScoreLabelDto scoreLabel)
+    {
+        ScoreLabel = scoreLabel;
+    }
+
+
     private FrameType GetFrameType()
     {
         return Count switch
@@ -54,8 +60,13 @@ public class Frame
     {
         Shots.Clear();
     }
-    
-    private bool IsValidaLastFrame(List<int> pinsDowned)
+
+    public void Accept(IFrameVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    private void ValidateLastFrame(List<int> pinsDowned)
     {
         if (lastShotsCount > 0)
         {

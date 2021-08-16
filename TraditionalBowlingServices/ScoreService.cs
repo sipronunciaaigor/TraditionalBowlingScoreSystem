@@ -25,7 +25,11 @@ public class ScoreService : IScoreService
         for (var i = 0; i < frames.Count; i++)
         {
             Frame frame = frames[i];
-            frame.TopIndexInShotSequence += frame.Count;
+            frame.AbsoluteLastIndex += frame.Count;
+
+            FrameVisitor fv = new FrameVisitor();
+
+            frame.Accept()
 
             score = StrategyVisitor(score, labels,
                 (frame.IsStrike(), new StrikeFrameScoreStrategy(frame, pinsDowned)),
@@ -37,6 +41,8 @@ public class ScoreService : IScoreService
 
         return labels;
     }
+
+
 
     public static int StrategyVisitor(int score, List<string> labels,
         params (bool condition, IFrameScoreStrategy strategy)[] strategies)
