@@ -17,24 +17,22 @@ public class ScoreService : IScoreService
         _logger = logger;
     }
 
-    public List<string> GetScores(List<int> pinsDowned, List<List<int>> frames)
+    public List<string> GetScores(List<int> pinsDowned, List<Frame> frames)
     {
         List<string> labels = new();
         int score = 0;
-        int index = 0;
 
         for (var i = 0; i < frames.Count; i++)
         {
-            int frameSum = frames[i].Sum();
-            int frameLen = frames[i].Count;
-            index += frameLen;
+            Frame frame = frames[i];
+            frame.TopIndexInShotSequence += frame.Count;
 
             score = StrategyVisitor(score, labels,
-                (frameLen == 1 && frameSum == 10, new StrikeFrameScoreStrategy(pinsDowned, index)),
-                (frameLen == 1 && frameSum < 10, new OpenFrameScoreStrategy(frameSum)),
-                (frameLen == 2 && frameSum >= 10, new SpareFrameScoreStrategy(pinsDowned, index)),
-                (frameLen == 2 && frameSum < 10, new ClosedFrameScoreStrategy(frameSum)),
-                (i == frames.Count - 1 && frameLen < 4 && frameSum <= 30, new LastFrameScoreStrategy(frameSum)));
+                (frame.IsStrike(), new StrikeFrameScoreStrategy(frame, pinsDowned)),
+                (frame.IsOpen(), new OpenFrameScoreStrategy(frame)),
+                (frame.IsSpare(), new SpareFrameScoreStrategy(frame, pinsDowned)),
+                (frame.IsClosed(), new ClosedFrameScoreStrategy(frame)),
+                (frame.IsLatetst(), new LastFrameScoreStrategy(frame)));
         }
 
         return labels;

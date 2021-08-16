@@ -4,11 +4,11 @@ public class OpenFrameScoreStrategy : IFrameScoreStrategy
 {
     ScoreLabelDto ScoreLabel { get; }
 
-    public OpenFrameScoreStrategy(int frameSum)
+    public OpenFrameScoreStrategy(Frame frame)
     {
         ScoreLabel = new()
         {
-            Score = frameSum,
+            Score = frame.Sum,
             UnknownLabel = true
         };
     }

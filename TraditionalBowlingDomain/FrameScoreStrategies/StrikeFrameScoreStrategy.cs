@@ -4,9 +4,9 @@ public class StrikeFrameScoreStrategy : IFrameScoreStrategy
 {
     ScoreLabelDto ScoreLabel { get; }
 
-    public StrikeFrameScoreStrategy(List<int> pinsDowned, int index)
+    public StrikeFrameScoreStrategy(Frame frame, List<int> pinsDowned)
     {
-        List<int> nextTwo = pinsDowned.Skip(index).Take(2).ToList();
+        List<int> nextTwo = pinsDowned.Skip(frame.TopIndexInShotSequence).Take(2).ToList();
         int totScore = 10 + nextTwo.Sum();
         ScoreLabel = new()
         {
