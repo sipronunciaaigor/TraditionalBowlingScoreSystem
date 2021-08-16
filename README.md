@@ -1,7 +1,7 @@
 # Traditional Bowling Score System
 
 ## Dev environment
-.net 6 preview-7: https://dotnet.microsoft.com/download/dotnet/6.0
+.net 5: https://dotnet.microsoft.com/download/dotnet/5.0
 
 Visual Studio 2022 preview: https://visualstudio.microsoft.com/vs/preview/
 
@@ -31,4 +31,4 @@ https://www.bowlinggenius.com
 https://www.liveabout.com/bowling-scoring-420895
 
 ## TODO LIST
-[] Create classes for frame
+[ ] Create classes for frame
