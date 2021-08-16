@@ -1,48 +1,50 @@
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
+using System.Linq;
 using TraditionalBowlingDomain;
 using Xunit;
 
-namespace TraditionalBowlingServicesTests;
-
-public class GameProgressResponseDtoTest
+namespace TraditionalBowlingServicesTests
 {
-    private readonly Fixture _fixture;
-
-    public GameProgressResponseDtoTest()
+    public class GameProgressResponseDtoTest
     {
-        _fixture = new();
-        _fixture.Customize(new AutoNSubstituteCustomization());
-    }
+        private readonly Fixture _fixture;
 
-    [Theory]
-    [InlineData(1, false)]
-    [InlineData(9, false)]
-    [InlineData(10, true)]
-    public void GameCompleted_ShouldChange(int frames, bool completed)
-    {
-        // Arrange and act
-        var gameProgressResponseDto = _fixture
-            .Build<GameProgressResponseDto>()
-            .With(x => x.FrameProgressScores, _fixture.CreateMany<string>(frames).ToList())
-            .Create();
+        public GameProgressResponseDtoTest()
+        {
+            _fixture = new();
+            _fixture.Customize(new AutoNSubstituteCustomization());
+        }
 
-        // Assert
-        gameProgressResponseDto.GameCompleted.Should().Be(completed);
-    }
+        [Theory]
+        [InlineData(1, false)]
+        [InlineData(9, false)]
+        [InlineData(10, true)]
+        public void GameCompleted_ShouldChange(int frames, bool completed)
+        {
+            // Arrange and act
+            var gameProgressResponseDto = _fixture
+                .Build<GameProgressResponseDto>()
+                .With(x => x.FrameProgressScores, _fixture.CreateMany<string>(frames).ToList())
+                .Create();
 
-    [Fact]
-    public void GameCompleted_ShouldBeFalse_When10thFrameOpen()
-    {
-        // Arrange and act
-        var gameProgressResponseDto = _fixture
-            .Build<GameProgressResponseDto>()
-            .With(x => x.FrameProgressScores, _fixture.CreateMany<string>(9).ToList())
-            .Create();
+            // Assert
+            gameProgressResponseDto.GameCompleted.Should().Be(completed);
+        }
 
-        gameProgressResponseDto.FrameProgressScores.Add("*");
-        // Assert
-        gameProgressResponseDto.GameCompleted.Should().BeFalse();
+        [Fact]
+        public void GameCompleted_ShouldBeFalse_When10thFrameOpen()
+        {
+            // Arrange and act
+            var gameProgressResponseDto = _fixture
+                .Build<GameProgressResponseDto>()
+                .With(x => x.FrameProgressScores, _fixture.CreateMany<string>(9).ToList())
+                .Create();
+
+            gameProgressResponseDto.FrameProgressScores.Add("*");
+            // Assert
+            gameProgressResponseDto.GameCompleted.Should().BeFalse();
+        }
     }
 }

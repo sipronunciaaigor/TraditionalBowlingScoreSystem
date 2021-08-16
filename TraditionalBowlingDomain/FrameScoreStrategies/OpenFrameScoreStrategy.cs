@@ -1,20 +1,21 @@
-namespace TraditionalBowlingDomain;
-
-public class OpenFrameScoreStrategy : IFrameScoreStrategy
+namespace TraditionalBowlingDomain
 {
-    ScoreLabelDto ScoreLabel { get; }
-
-    public OpenFrameScoreStrategy(int frameSum)
+    public class OpenFrameScoreStrategy : IFrameScoreStrategy
     {
-        ScoreLabel = new()
+        ScoreLabelDto ScoreLabel { get; }
+
+        public OpenFrameScoreStrategy(int frameSum)
         {
-            Score = frameSum,
-            UnknownLabel = true
-        };
-    }
+            ScoreLabel = new()
+            {
+                Score = frameSum,
+                UnknownLabel = true
+            };
+        }
 
-    public ScoreLabelDto GetScoreLabel()
-    {
-        return ScoreLabel;
+        public ScoreLabelDto GetScoreLabel()
+        {
+            return ScoreLabel;
+        }
     }
 }

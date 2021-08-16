@@ -1,6 +1,9 @@
-﻿namespace TraditionalBowlingDomain;
+﻿using System.Collections.Generic;
 
-public record ScoreProgressRequestDto
+namespace TraditionalBowlingDomain
 {
-    public List<int> PinsDowned { get; set; } = new(21);
+    public record ScoreProgressRequestDto
+    {
+        public List<int> PinsDowned { get; set; } = new(21);
+    }
 }

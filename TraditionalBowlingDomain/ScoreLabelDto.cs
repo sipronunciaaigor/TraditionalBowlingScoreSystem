@@ -1,7 +1,8 @@
-namespace TraditionalBowlingDomain;
-
-public record ScoreLabelDto
+namespace TraditionalBowlingDomain
 {
-    public int Score { get; set; }
-    public bool UnknownLabel { get; set; }
+    public record ScoreLabelDto
+    {
+        public int Score { get; set; }
+        public bool UnknownLabel { get; set; }
+    }
 }

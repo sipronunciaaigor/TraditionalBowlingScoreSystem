@@ -1,6 +1,7 @@
-namespace TraditionalBowlingDomain;
-
-public interface IFrameScoreStrategy
+namespace TraditionalBowlingDomain
 {
-    ScoreLabelDto GetScoreLabel();
+    public interface IFrameScoreStrategy
+    {
+        ScoreLabelDto GetScoreLabel();
+    }
 }

@@ -1,35 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using TraditionalBowlingDomain;
 using TraditionalBowlingServices;
 
-namespace TraditionalBowlingScoreSystem.Controllers;
-[ApiController]
-public class BowlingController : ControllerBase
+namespace TraditionalBowlingScoreSystem.Controllers
 {
-    private readonly IGameService _gameService;
-    private readonly ILogger<BowlingController> _logger;
-
-    public BowlingController(IGameService gameService, ILogger<BowlingController> logger)
+    [ApiController]
+    public class BowlingController : ControllerBase
     {
-        _gameService = gameService;
-        _logger = logger;
-    }
+        private readonly IGameService _gameService;
+        private readonly ILogger<BowlingController> _logger;
 
-    [HttpPost("scores")]
-    public IActionResult Scores(ScoreProgressRequestDto requestDto)
-    {
-        try
+        public BowlingController(IGameService gameService, ILogger<BowlingController> logger)
         {
-            return Ok(_gameService.GetScores(requestDto.PinsDowned));
+            _gameService = gameService;
+            _logger = logger;
         }
-        catch (ArgumentOutOfRangeException ex)
+
+        [HttpPost("scores")]
+        public IActionResult Scores(ScoreProgressRequestDto requestDto)
         {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            try
+            {
+                return Ok(_gameService.GetScores(requestDto.PinsDowned));
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

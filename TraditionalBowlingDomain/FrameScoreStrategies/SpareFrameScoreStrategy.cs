@@ -1,22 +1,26 @@
-namespace TraditionalBowlingDomain;
+using System.Collections.Generic;
+using System.Linq;
 
-public class SpareFrameScoreStrategy : IFrameScoreStrategy
+namespace TraditionalBowlingDomain
 {
-    ScoreLabelDto ScoreLabel { get; }
-
-    public SpareFrameScoreStrategy(List<int> pinsDowned, int index)
+    public class SpareFrameScoreStrategy : IFrameScoreStrategy
     {
-        List<int> nextOne = pinsDowned.Skip(index).Take(1).ToList();
-        int totScore = 10 + nextOne.Sum();
-        ScoreLabel = new()
+        ScoreLabelDto ScoreLabel { get; }
+
+        public SpareFrameScoreStrategy(List<int> pinsDowned, int index)
         {
-            Score = totScore,
-            UnknownLabel = nextOne.Count < 1
-        };
-    }
+            List<int> nextOne = pinsDowned.Skip(index).Take(1).ToList();
+            int totScore = 10 + nextOne.Sum();
+            ScoreLabel = new()
+            {
+                Score = totScore,
+                UnknownLabel = nextOne.Count < 1
+            };
+        }
 
-    public ScoreLabelDto GetScoreLabel()
-    {
-        return ScoreLabel;
+        public ScoreLabelDto GetScoreLabel()
+        {
+            return ScoreLabel;
+        }
     }
 }

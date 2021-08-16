@@ -1,14 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TraditionalBowlingServices;
-
-public static class ServiceRegistration
+namespace TraditionalBowlingServices
 {
-    public static IServiceCollection RegisterGameServices(this IServiceCollection services)
+    public static class ServiceRegistration
     {
-        services.AddSingleton<IGameService, GameService>();
-        services.AddSingleton<IScoreService, ScoreService>();
-        services.AddSingleton<IFrameService, FrameService>();
-        return services;
+        public static IServiceCollection RegisterGameServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IGameService, GameService>();
+            services.AddSingleton<IScoreService, ScoreService>();
+            services.AddSingleton<IFrameService, FrameService>();
+            return services;
+        }
     }
 }
