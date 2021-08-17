@@ -8,6 +8,7 @@ using TraditionalBowlingServices;
 namespace TraditionalBowlingScoreSystem.Controllers
 {
     [ApiController]
+    [Produces("application/json")]
     public class BowlingController : ControllerBase
     {
         private readonly IGameService _gameService;
