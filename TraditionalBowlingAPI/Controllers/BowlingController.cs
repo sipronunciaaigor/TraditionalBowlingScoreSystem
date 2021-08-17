@@ -20,6 +20,7 @@ namespace TraditionalBowlingScoreSystem.Controllers
         }
 
         [HttpPost("scores")]
+        [ProducesResponseType(typeof(GameProgressResponseDto), StatusCodes.Status200OK)]
         public IActionResult Scores(ScoreProgressRequestDto requestDto)
         {
             try
