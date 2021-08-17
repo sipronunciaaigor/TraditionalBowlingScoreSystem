@@ -21,6 +21,8 @@ namespace TraditionalBowlingScoreSystem.Controllers
 
         [HttpPost("scores")]
         [ProducesResponseType(typeof(GameProgressResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Scores(ScoreProgressRequestDto requestDto)
         {
             try
