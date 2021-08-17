@@ -25,6 +25,9 @@ Body
 }
 ```
 
+### Swagger
+Documentation through Swagger is available at `/swagger/index.html`
+
 ## Resources
 https://www.bowlinggenius.com
 
