@@ -1,16 +1,10 @@
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TraditionalBowlingDomain;
-using TraditionalBowlingScoreSystem.Controllers;
 using TraditionalBowlingServices;
 using Xunit;
 
@@ -180,79 +174,5 @@ namespace TraditionalBowlingServicesTests
             // Assert
             getFrames.Should().Throw<ArgumentOutOfRangeException>("lastShots").WithMessage($"Last frame not valid. Not allowed to throw the last ball (Parameter 'lastShots')");
         }
-
-        [Fact]
-        public void BowlingController_ShouldReturnOk()
-        {
-            Fixture fixture = new();
-            fixture.Customize(new AutoNSubstituteCustomization());
-            var myLogger = Substitute.For<ILogger<BowlingController>>();
-
-            var _gameService = fixture.Freeze<IGameService>();
-            var _bowlingController = new BowlingController(
-                _gameService,
-                myLogger
-                );
-
-            // Arrange
-            ScoreProgressRequestDto requestDto = fixture.Create<ScoreProgressRequestDto>();
-            GameProgressResponseDto gameProgressResponseDto = fixture.Create<GameProgressResponseDto>();
-            _gameService.GetScores(requestDto.PinsDowned).Returns(gameProgressResponseDto);
-
-            // Act
-            var result = (OkObjectResult)_bowlingController.Scores(requestDto);
-
-            // Assert
-            result.StatusCode.Should().Be(StatusCodes.Status200OK);
-        }
-
-        [Fact]
-        public void BowlingController_ShouldReturn400()
-        {
-            Fixture fixture = new();
-            fixture.Customize(new AutoNSubstituteCustomization());
-            var myLogger = Substitute.For<ILogger<BowlingController>>();
-
-            var _gameService = fixture.Freeze<IGameService>();
-            var _bowlingController = new BowlingController(
-                _gameService,
-                myLogger
-                );
-
-            // Arrange
-            ScoreProgressRequestDto requestDto = fixture.Create<ScoreProgressRequestDto>();
-            _gameService.GetScores(requestDto.PinsDowned).Throws<ArgumentOutOfRangeException>();
-
-            // Act
-            var result = (BadRequestObjectResult)_bowlingController.Scores(requestDto);
-
-            // Assert
-            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        }
-
-        [Fact]
-        public void BowlingController_ShouldReturn500()
-        {
-            Fixture fixture = new();
-            fixture.Customize(new AutoNSubstituteCustomization());
-            var myLogger = Substitute.For<ILogger<BowlingController>>();
-
-            var _gameService = fixture.Freeze<IGameService>();
-            var _bowlingController = new BowlingController(
-                _gameService,
-                myLogger
-                );
-
-            // Arrange
-            ScoreProgressRequestDto requestDto = fixture.Create<ScoreProgressRequestDto>();
-            _gameService.GetScores(requestDto.PinsDowned).Throws<Exception>();
-
-            // Act
-            var result = (StatusCodeResult)_bowlingController.Scores(requestDto);
-
-            // Assert
-            result.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
     }
 }
