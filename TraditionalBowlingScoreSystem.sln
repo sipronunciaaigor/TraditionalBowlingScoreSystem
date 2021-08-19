@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingServices"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingServicesTests", "TraditionalBowlingServicesTests\TraditionalBowlingServicesTests.csproj", "{867F325A-A48D-49E7-8EF5-77AD12898FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingDomain", "TraditionalBowlingDomain\TraditionalBowlingDomain.csproj", "{C1EE5A34-EC53-4A95-B0B6-9B5277AE5C96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingDomain", "TraditionalBowlingDomain\TraditionalBowlingDomain.csproj", "{C1EE5A34-EC53-4A95-B0B6-9B5277AE5C96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingDomainTests", "TraditionalBowlingDomainTests\TraditionalBowlingDomainTests.csproj", "{75C43A72-4CEB-418C-B94B-40E87800E2CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalBowlingDomainTests", "TraditionalBowlingDomainTests\TraditionalBowlingDomainTests.csproj", "{75C43A72-4CEB-418C-B94B-40E87800E2CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalBowlingAPITest", "TraditionalBowlingAPITest\TraditionalBowlingAPITest.csproj", "{6F2228EC-7E4D-4F4C-8586-892DB3FCD53C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{75C43A72-4CEB-418C-B94B-40E87800E2CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75C43A72-4CEB-418C-B94B-40E87800E2CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75C43A72-4CEB-418C-B94B-40E87800E2CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2228EC-7E4D-4F4C-8586-892DB3FCD53C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2228EC-7E4D-4F4C-8586-892DB3FCD53C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2228EC-7E4D-4F4C-8586-892DB3FCD53C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2228EC-7E4D-4F4C-8586-892DB3FCD53C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
